@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Creator Analytics</h1>
+
+<div class="card">
+
+    <h2>Add Performance Data</h2>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit">
+            Save Analytics
+        </button>
+
+    </form>
+
+</div>
+
+<div class="card">
+
+    <h2>Performance Overview</h2>
+
+    <canvas id="analyticsChart"></canvas>
+
+</div>
+
+<div class="card table-wrapper">
+
+    <h2>Performance Records</h2>
+
+    <table>
+
+        <thead>
+            <tr>
+                <th>Platform</th>
+                <th>Date</th>
+                <th>Views</th>
+                <th>Likes</th>
+                <th>Comments</th>
+                <th>Followers</th>
+                <th>Engagement</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {% for item in records %}
+
+            <tr>
+                <td>{{ item.platform }}</td>
+                <td>{{ item.date }}</td>
+                <td>{{ item.views }}</td>
+                <td>{{ item.likes }}</td>
+                <td>{{ item.comments }}</td>
+                <td>{{ item.followers }}</td>
+                <td>{{ item.engagement_rate }}%</td>
+            </tr>
+
+            {% endfor %}
+
+        </tbody>
+
+    </table>
+
+</div>
+
+{{ labels|json_script:"chart-labels" }}
+{{ chart_views|json_script:"chart-views" }}
+{{ chart_likes|json_script:"chart-likes" }}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+const labels = JSON.parse(
+    document.getElementById("chart-labels").textContent
+);
+
+const views = JSON.parse(
+    document.getElementById("chart-views").textContent
+);
+
+const likes = JSON.parse(
+    document.getElementById("chart-likes").textContent
+);
+
+new Chart(document.getElementById("analyticsChart"), {
+
+    type: "line",
+
+    data: {
+
+        labels: labels,
+
+        datasets: [
+            {
+                label: "Views",
+                data: views,
+                borderColor: "#8b5cf6",
+                tension: 0.3
+            },
+            {
+                label: "Likes",
+                data: likes,
+                borderColor: "#22c55e",
+                tension: 0.3
+            }
+        ]
+
+    },
+
+    options: {
+        responsive: true
+    }
+
+});
+
+</script>
+
+{% endblock %}

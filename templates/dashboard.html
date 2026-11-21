@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Creator Dashboard</h1>
+
+<section class="hero">
+
+    <h1>Create smarter. Grow faster.</h1>
+
+    <p>Your all-in-one AI-powered creator workspace.</p>
+
+    <a class="btn" href="{% url 'ai_tool' 'writer' %}">
+        Start Creating
+    </a>
+
+</section>
+
+<div class="grid">
+
+    <div class="card">
+        <p>Saved Content</p>
+        <h2>{{ saved_count }}</h2>
+    </div>
+
+    <div class="card">
+        <p>Planned Posts</p>
+        <h2>{{ planned_count }}</h2>
+    </div>
+
+    <div class="card">
+        <p>Total Recorded Views</p>
+        <h2>{{ views_count }}</h2>
+    </div>
+
+</div>
+
+<h2 class="section-title">Explore Creator Tools</h2>
+
+<div class="grid">
+
+    <a class="card tool"
+       href="{% url 'ai_tool' 'writer' %}">
+        <h2>✍ AI Writer</h2>
+        <p>Generate engaging content.</p>
+    </a>
+
+    <a class="card tool"
+       href="{% url 'ai_tool' 'prompt' %}">
+        <h2>✦ Prompt Designer</h2>
+        <p>Create professional AI prompts.</p>
+    </a>
+
+    <a class="card tool"
+       href="{% url 'ai_tool' 'video' %}">
+        <h2>▶ Video Concept</h2>
+        <p>Generate scripts and storyboards.</p>
+    </a>
+
+    <a class="card tool"
+       href="{% url 'ai_tool' 'ideas' %}">
+        <h2>💡 Idea Generator</h2>
+        <p>Discover new content ideas.</p>
+    </a>
+
+    <a class="card tool"
+       href="{% url 'planner' %}">
+        <h2>▦ Social Planner</h2>
+        <p>Organize your publishing schedule.</p>
+    </a>
+
+    <a class="card tool"
+       href="{% url 'analytics' %}">
+        <h2>↗ Creator Analytics</h2>
+        <p>Track your content performance.</p>
+    </a>
+
+</div>
+
+<h2 class="section-title">Recent Content</h2>
+
+<div class="card">
+
+    {% for item in recent_content %}
+
+        <p>
+            <a href="{% url 'edit_content' item.pk %}">
+                {{ item.title }}
+            </a>
+            — {{ item.module }}
+        </p>
+
+    {% empty %}
+
+        <p>No saved content yet.</p>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}

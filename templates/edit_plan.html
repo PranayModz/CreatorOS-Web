@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Edit Planned Content</h1>
+
+<form method="POST" class="card">
+
+    {% csrf_token %}
+
+    {{ form.as_p }}
+
+    <button type="submit">Update Content</button>
+
+</form>
+
+{% endblock %}

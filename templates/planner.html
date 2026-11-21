@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Social Media Planner</h1>
+
+<a class="btn"
+   href="{% url 'ai_tool' 'planning' %}">
+    Generate AI Content Plan
+</a>
+
+<div class="card">
+
+    <h2>Schedule New Content</h2>
+
+    <form method="POST">
+
+        {% csrf_token %}
+
+        {{ form.as_p }}
+
+        <button type="submit">
+            Add to Planner
+        </button>
+
+    </form>
+
+</div>
+
+<h2 class="section-title">Upcoming Content</h2>
+
+{% for plan in plans %}
+
+<div class="card">
+
+    <h2>{{ plan.title }}</h2>
+
+    <p>Platform: {{ plan.platform }}</p>
+
+    <p>Date: {{ plan.publish_date }}</p>
+
+    <p>Status: {{ plan.status }}</p>
+
+    <p>{{ plan.description }}</p>
+
+    <a class="btn"
+       href="{% url 'edit_plan' plan.pk %}">
+        Edit
+    </a>
+
+    <form method="POST"
+          action="{% url 'delete_plan' plan.pk %}">
+
+        {% csrf_token %}
+
+        <button class="danger" type="submit">
+            Delete
+        </button>
+
+    </form>
+
+</div>
+
+{% empty %}
+
+<p>No content scheduled.</p>
+
+{% endfor %}
+
+{% endblock %}

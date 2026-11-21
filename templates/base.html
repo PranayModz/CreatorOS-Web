@@ -1,0 +1,76 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>CreatorOS AI</title>
+
+    <link rel="stylesheet"
+          href="{% static 'css/style.css' %}">
+
+</head>
+<body>
+
+    <aside class="sidebar">
+
+        <h2 class="logo">✦ CreatorOS AI</h2>
+
+        <p class="sidebar-label">WORKSPACE</p>
+
+        <a href="{% url 'dashboard' %}">
+            Dashboard
+        </a>
+
+        <a href="{% url 'ai_tool' 'writer' %}">
+            AI Writer
+        </a>
+
+        <a href="{% url 'ai_tool' 'prompt' %}">
+            Prompt Designer
+        </a>
+
+        <a href="{% url 'ai_tool' 'video' %}">
+            Video Concept
+        </a>
+
+        <a href="{% url 'ai_tool' 'ideas' %}">
+            Idea Generator
+        </a>
+
+        <a href="{% url 'planner' %}">
+            Social Media Planner
+        </a>
+
+        <a href="{% url 'analytics' %}">
+            Creator Analytics
+        </a>
+
+        <a href="{% url 'saved_content' %}">
+            Saved Content
+        </a>
+
+        <div class="sidebar-footer">
+            AI Powered Workspace
+        </div>
+
+    </aside>
+
+    <main class="main-content">
+
+        {% for message in messages %}
+            <div class="message">
+                {{ message }}
+            </div>
+        {% endfor %}
+
+        {% block content %}
+        {% endblock %}
+
+    </main>
+
+</body>
+</html>

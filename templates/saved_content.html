@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Saved Content</h1>
+
+<form method="GET">
+
+    <input type="search"
+           name="q"
+           value="{{ query }}"
+           placeholder="Search saved content...">
+
+    <button type="submit">Search</button>
+
+</form>
+
+{% for item in items %}
+
+<div class="card">
+
+    <h2>{{ item.title }}</h2>
+
+    <p>{{ item.module }} | {{ item.created_at }}</p>
+
+    <p>{{ item.content|truncatewords:40 }}</p>
+
+    <a class="btn"
+       href="{% url 'edit_content' item.pk %}">
+        View / Edit
+    </a>
+
+    <form method="POST"
+          action="{% url 'delete_content' item.pk %}"
+          onsubmit="return confirm('Delete this content?')">
+
+        {% csrf_token %}
+
+        <button class="danger" type="submit">
+            Delete
+        </button>
+
+    </form>
+
+</div>
+
+{% empty %}
+
+<p>No saved content found.</p>
+
+{% endfor %}
+
+{% endblock %}
