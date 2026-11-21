@@ -15,8 +15,13 @@
 </head>
 <body>
 
+    
+
     <aside class="sidebar">
 
+        <div class="sidebar-account">
+
+  
         <h2 class="logo">✦ CreatorOS AI</h2>
 
         <p class="sidebar-label">WORKSPACE</p>
@@ -52,6 +57,36 @@
         <a href="{% url 'saved_content' %}">
             Saved Content
         </a>
+
+        {% if request.user.is_authenticated %}
+
+<div class="sidebar-account">
+
+    <div class="account-profile">
+
+        <div class="account-avatar">
+            {{ request.user.username|first|upper }}
+        </div>
+
+        <div class="account-info">
+            <strong>{{ request.user.username }}</strong>
+            <small>Creator Account</small>
+        </div>
+
+    </div>
+
+    <form method="POST" action="{% url 'logout' %}">
+        {% csrf_token %}
+
+        <button type="submit" class="account-logout">
+            ↪ Logout
+        </button>
+
+    </form>
+
+</div>
+
+{% endif %}
 
         <div class="sidebar-footer">
             AI Powered Workspace

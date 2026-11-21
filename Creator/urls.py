@@ -1,20 +1,29 @@
+
 from django.urls import path
 from . import views
 
+
 urlpatterns = [
+
+    # Authentication
+
+    path('login/', views.login_view, name='login'),
+
+    path('register/', views.register_view, name='register'),
+
+    path('logout/', views.logout_view, name='logout'),
+
+    # Dashboard
+
     path('', views.dashboard, name='dashboard'),
 
-    path(
-        'ai/<str:tool>/',
-        views.ai_tool,
-        name='ai_tool'
-    ),
+    # AI Tools
 
-    path(
-        'saved/',
-        views.saved_content,
-        name='saved_content'
-    ),
+    path('ai/<str:tool>/', views.ai_tool, name='ai_tool'),
+
+    # Saved Content
+
+    path('saved/', views.saved_content, name='saved_content'),
 
     path(
         'saved/edit/<int:pk>/',
@@ -27,6 +36,8 @@ urlpatterns = [
         views.delete_content,
         name='delete_content'
     ),
+
+    # Planner
 
     path('planner/', views.planner, name='planner'),
 
@@ -42,9 +53,14 @@ urlpatterns = [
         name='delete_plan'
     ),
 
+    # Analytics
+
+    path('analytics/', views.analytics, name='analytics'),
+
     path(
-        'analytics/',
-        views.analytics,
-        name='analytics'
+        'analytics/delete/<int:pk>/',
+        views.delete_analytics,
+        name='delete_analytics'
     ),
+
 ]

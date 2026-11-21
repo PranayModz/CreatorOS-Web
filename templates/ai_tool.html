@@ -1,0 +1,451 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    .ai-workspace {
+        animation: fadeIn 0.5s ease;
+    }
+
+    .ai-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 24px;
+        align-items: start;
+    }
+
+    .ai-header {
+        background: linear-gradient(135deg, #392265, #19253e);
+        padding: 30px;
+        border-radius: 18px;
+        margin-bottom: 25px;
+    }
+
+    .ai-header h1 {
+        margin: 10px 0;
+    }
+
+    .ai-label {
+        color: #c4b5fd;
+        font-size: 12px;
+        letter-spacing: 2px;
+        font-weight: 700;
+    }
+
+    .generate-btn {
+        width: 100%;
+        padding: 15px;
+        background: linear-gradient(135deg, #7c3aed, #9333ea);
+        font-weight: 600;
+        transition: 0.3s;
+    }
+
+    .generate-btn:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px #7c3aed55;
+    }
+
+    .generate-btn:disabled {
+        opacity: 0.6;
+        cursor: wait;
+    }
+
+    .result-box {
+        background: #0b1020;
+        padding: 22px;
+        border: 1px solid #35415b;
+        border-radius: 12px;
+        min-height: 280px;
+        max-height: 650px;
+        overflow-y: auto;
+        white-space: pre-wrap;
+        overflow-wrap: anywhere;
+        line-height: 1.8;
+        color: #e2e8f0;
+    }
+
+    .empty-state {
+        padding: 55px 15px;
+        text-align: center;
+        color: #94a3b8;
+    }
+
+    .empty-icon {
+        font-size: 48px;
+        color: #a78bfa;
+    }
+
+    .result-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 18px;
+    }
+
+    .loading {
+        display: none;
+        text-align: center;
+        margin-top: 18px;
+        color: #c4b5fd;
+    }
+
+    .spinner {
+        width: 30px;
+        height: 30px;
+        border: 3px solid #35415b;
+        border-top-color: #a78bfa;
+        border-radius: 50%;
+        margin: 12px auto;
+        animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+        to {
+            transform: rotate(360deg);
+        }
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    @media (max-width: 1000px) {
+        .ai-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="ai-workspace">
+
+    <section class="ai-header">
+
+        <span class="ai-label">
+            ✦ CREATOROS AI WORKSPACE
+        </span>
+
+        <h1>{{ tool_name }}</h1>
+
+        <p>
+            {% if tool == 'writer' %}
+                Generate professional scripts, titles,
+                captions and hashtags.
+
+            {% elif tool == 'prompt' %}
+                Create powerful and detailed AI prompts.
+
+            {% elif tool == 'video' %}
+                Generate video concepts, hooks,
+                voiceovers and storyboards.
+
+            {% elif tool == 'ideas' %}
+                Discover creative content ideas
+                for your next viral post.
+
+            {% elif tool == 'planning' %}
+                Create a structured social media
+                content calendar.
+
+            {% endif %}
+        </p>
+
+    </section>
+
+    <div class="ai-grid">
+
+        <!-- INPUT SECTION -->
+
+        <section class="card">
+
+            <h2>✦ Create Content</h2>
+
+            <p>
+                Enter your requirements and let AI
+                help you create amazing content.
+            </p>
+
+            <form method="POST" id="generateForm">
+
+                {% csrf_token %}
+
+                <input type="hidden"
+                       name="action"
+                       value="generate">
+
+                <label for="topic">
+                    Topic or Requirements
+                </label>
+
+                <textarea
+                    name="topic"
+                    id="topic"
+                    rows="7"
+                    maxlength="4000"
+                    placeholder="Describe what you want to create..."
+                    required>{{ topic }}</textarea>
+
+                <label for="platform">
+                    Select Platform
+                </label>
+
+                <select name="platform" id="platform">
+
+                    <option value="YouTube"
+                    {% if platform == 'YouTube' %}selected{% endif %}>
+                        YouTube
+                    </option>
+
+                    <option value="Instagram"
+                    {% if platform == 'Instagram' %}selected{% endif %}>
+                        Instagram
+                    </option>
+
+                    <option value="Facebook"
+                    {% if platform == 'Facebook' %}selected{% endif %}>
+                        Facebook
+                    </option>
+
+                    <option value="TikTok"
+                    {% if platform == 'TikTok' %}selected{% endif %}>
+                        TikTok
+                    </option>
+
+                    <option value="LinkedIn"
+                    {% if platform == 'LinkedIn' %}selected{% endif %}>
+                        LinkedIn
+                    </option>
+
+                    <option value="Other"
+                    {% if platform == 'Other' %}selected{% endif %}>
+                        Other
+                    </option>
+
+                </select>
+
+                <label for="language">
+                    Content Language
+                </label>
+
+                <select name="language" id="language">
+
+                    <option value="English"
+                    {% if language == 'English' %}selected{% endif %}>
+                        English
+                    </option>
+
+                    <option value="Hindi"
+                    {% if language == 'Hindi' %}selected{% endif %}>
+                        Hindi
+                    </option>
+
+                    <option value="Hinglish"
+                    {% if language == 'Hinglish' %}selected{% endif %}>
+                        Hinglish
+                    </option>
+
+                    <option value="Marathi"
+                    {% if language == 'Marathi' %}selected{% endif %}>
+                        Marathi
+                    </option>
+
+                </select>
+
+                <button type="submit"
+                        class="generate-btn"
+                        id="generateBtn">
+
+                    ✦ Generate with AI
+
+                </button>
+
+                <div class="loading"
+                     id="loading"
+                     role="status">
+
+                    <div class="spinner"></div>
+
+                    AI is generating your content...
+
+                </div>
+
+            </form>
+
+        </section>
+
+        <!-- OUTPUT SECTION -->
+
+        <section class="card">
+
+            <h2>✦ AI Generated Output</h2>
+
+            <p>
+                Your generated content will appear here.
+            </p>
+
+            {% if result %}
+
+                <div class="result-box"
+                     id="generatedResult">{{ result }}</div>
+
+                <div class="result-actions">
+
+                    <button type="button"
+                            onclick="copyContent(this)">
+                        Copy Content
+                    </button>
+
+                    <button type="button"
+                            onclick="downloadContent()">
+                        Download TXT
+                    </button>
+
+                </div>
+
+                <form method="POST"
+                      style="margin-top: 15px;">
+
+                    {% csrf_token %}
+
+                    <input type="hidden"
+                           name="action"
+                           value="save">
+
+                    <input type="hidden"
+                           name="topic"
+                           value="{{ topic }}">
+
+                    <input type="hidden"
+                           name="platform"
+                           value="{{ platform }}">
+
+                    <input type="hidden"
+                           name="language"
+                           value="{{ language }}">
+
+                    <input type="hidden"
+                           name="result"
+                           value="{{ result }}">
+
+                    <button type="submit">
+                        Save Content
+                    </button>
+
+                </form>
+
+            {% else %}
+
+                <div class="result-box">
+
+                    <div class="empty-state">
+
+                        <div class="empty-icon">✦</div>
+
+                        <h3>No content generated yet</h3>
+
+                        <p>
+                            Enter your topic and click
+                            Generate with AI to get started.
+                        </p>
+
+                    </div>
+
+                </div>
+
+            {% endif %}
+
+        </section>
+
+    </div>
+
+</div>
+
+<script>
+
+    const form = document.getElementById("generateForm");
+
+    form.addEventListener("submit", function () {
+
+        document.getElementById("loading").style.display =
+            "block";
+
+        const button =
+            document.getElementById("generateBtn");
+
+        button.disabled = true;
+
+        button.textContent = "Generating...";
+
+    });
+
+
+    async function copyContent(button) {
+
+        const content = document.getElementById(
+            "generatedResult"
+        ).textContent;
+
+        try {
+
+            await navigator.clipboard.writeText(content);
+
+            button.textContent = "Copied!";
+
+            setTimeout(function () {
+
+                button.textContent = "Copy Content";
+
+            }, 2000);
+
+        } catch (error) {
+
+            alert("Unable to copy content.");
+
+        }
+
+    }
+
+
+    function downloadContent() {
+
+        const content = document.getElementById(
+            "generatedResult"
+        ).textContent;
+
+        const blob = new Blob(
+            [content],
+            { type: "text/plain;charset=utf-8" }
+        );
+
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+
+        link.href = url;
+
+        link.download = "CreatorOS-AI-Content.txt";
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        link.remove();
+
+        setTimeout(function () {
+
+            URL.revokeObjectURL(url);
+
+        }, 1000);
+
+    }
+
+</script>
+
+{% endblock %}

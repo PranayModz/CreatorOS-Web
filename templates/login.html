@@ -1,0 +1,88 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | CreatorOS</title>
+
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+<body>
+
+<div class="orb orb-one"></div>
+<div class="orb orb-two"></div>
+
+<div class="auth-card">
+
+    <div class="brand">
+        <i class="fa-solid fa-bolt"></i>
+        CreatorOS<span> AI</span>
+    </div>
+
+    <h1>Welcome back</h1>
+    <p class="subtitle">Your creative journey continues here.</p>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>Username</label>
+        <div class="input-group">
+            <i class="fa-regular fa-user"></i>
+            <input type="text" name="username"
+                   placeholder="Enter username"
+                   autocomplete="username" required>
+        </div>
+
+        <label>Password</label>
+        <div class="input-group">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" name="password"
+                   id="password" placeholder="Enter password"
+                   autocomplete="current-password" required>
+            <button type="button" class="eye" onclick="togglePassword()">
+                <i id="eyeIcon" class="fa-regular fa-eye"></i>
+            </button>
+        </div>
+
+        <button type="submit" class="auth-btn">
+            Sign In <i class="fa-solid fa-arrow-right"></i>
+        </button>
+
+    </form>
+
+    <p class="switch-page">
+        New to CreatorOS?
+        <a href="{% url 'register' %}">Create account</a>
+    </p>
+
+    <div class="footer-text">
+        <i class="fa-solid fa-shield-halved"></i>
+        Your creative workspace
+    </div>
+
+</div>
+
+<script>
+function togglePassword() {
+    const password = document.getElementById("password");
+    const icon = document.getElementById("eyeIcon");
+    const hidden = password.type === "password";
+
+    password.type = hidden ? "text" : "password";
+    icon.className = hidden
+        ? "fa-regular fa-eye-slash"
+        : "fa-regular fa-eye";
+}
+</script>
+
+</body>
+</html>

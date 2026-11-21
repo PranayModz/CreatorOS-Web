@@ -20,3 +20,8 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+
+"""For Checking django database admin pannel link 
+http://127.0.0.1:8000/admin/?utm_source=chatgpt.com"""

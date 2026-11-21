@@ -223,3 +223,166 @@ th {
     }
 
 }
+
+/* ===== SIDEBAR ACCOUNT SECTION ===== */
+
+.sidebar-account {
+    margin-top: auto;
+    padding: 16px 0 10px;
+    border-top: 1px solid #293247;
+    width: 100%;
+}
+
+.sidebar-account .user-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 4px;
+    margin-bottom: 12px;
+}
+
+.sidebar-account .user-avatar {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7c3aed, #6366f1);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.sidebar-account .user-details {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+}
+
+.sidebar-account .user-details strong {
+    color: #ffffff;
+    font-size: 14px;
+    overflow-wrap: anywhere;
+}
+
+.sidebar-account .user-details small {
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+.sidebar-account form {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+}
+
+.sidebar-account .logout-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    background: rgba(239, 68, 68, 0.08);
+    color: #f87171;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+}
+
+.sidebar-account .logout-btn:hover {
+    background: #dc2626;
+    color: white;
+    box-shadow: 0 4px 15px rgba(220, 38, 38, 0.2);
+}
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+/* SIDEBAR PROFILE AND LOGOUT */
+
+.sidebar {
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+}
+
+.sidebar .sidebar-account {
+    margin-top: auto;
+    padding: 18px 0 12px;
+    border-top: 1px solid #293247;
+}
+
+.sidebar .account-profile {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 15px;
+}
+
+.sidebar .account-avatar {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #7c3aed, #6366f1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 18px;
+    font-weight: 700;
+}
+
+.sidebar .account-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    min-width: 0;
+}
+
+.sidebar .account-info strong {
+    color: #ffffff;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+}
+
+.sidebar .account-info small {
+    color: #94a3b8;
+    font-size: 11px;
+}
+
+.sidebar .sidebar-account form {
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+.sidebar .account-logout {
+    width: 100%;
+    margin: 0;
+    padding: 12px;
+    background: rgba(239, 68, 68, 0.08);
+    border: 1px solid rgba(239, 68, 68, 0.25);
+    border-radius: 10px;
+    color: #f87171;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.sidebar .account-logout:hover {
+    background: #dc2626;
+    color: #ffffff;
+}

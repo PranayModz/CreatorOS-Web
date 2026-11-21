@@ -1,0 +1,151 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Create Account | CreatorOS</title>
+
+    <link rel="stylesheet" href="{% static 'css/auth.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+</head>
+
+<body>
+
+<div class="orb orb-one"></div>
+<div class="orb orb-two"></div>
+
+<div class="auth-card">
+
+    <div class="brand">
+        <i class="fa-solid fa-bolt"></i>
+        CreatorOS<span> AI</span>
+    </div>
+
+    <h1>Start creating</h1>
+    <p class="subtitle">Create your personal AI-powered workspace.</p>
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="message">{{ message }}</div>
+        {% endfor %}
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <label>Username</label>
+        <div class="input-group">
+            <i class="fa-regular fa-user"></i>
+            <input type="text" name="username"
+                   placeholder="Choose username"
+                   maxlength="150" required>
+        </div>
+
+        <label>Email Address</label>
+        <div class="input-group">
+            <i class="fa-regular fa-envelope"></i>
+            <input type="email" name="email"
+                   placeholder="Enter your email" required>
+        </div>
+
+        <label>Password</label>
+        <div class="input-group">
+            <i class="fa-solid fa-lock"></i>
+            <input type="password" name="password1"
+                   id="password1"
+                   placeholder="Create password"
+                   autocomplete="new-password"
+                   minlength="8"
+                   oninput="checkStrength()" required>
+
+            <button type="button" class="eye"
+                    onclick="togglePassword('password1', this)">
+                <i class="fa-regular fa-eye"></i>
+            </button>
+        </div>
+
+        <div class="strength-track">
+            <div id="strengthBar"></div>
+        </div>
+
+        <small id="strengthText">Password strength</small>
+
+        <label>Confirm Password</label>
+        <div class="input-group">
+            <i class="fa-solid fa-shield-halved"></i>
+            <input type="password" name="password2"
+                   id="password2"
+                   placeholder="Confirm password"
+                   autocomplete="new-password" required>
+
+            <button type="button" class="eye"
+                    onclick="togglePassword('password2', this)">
+                <i class="fa-regular fa-eye"></i>
+            </button>
+        </div>
+
+        <button type="submit" class="auth-btn">
+            Create Account <i class="fa-solid fa-arrow-right"></i>
+        </button>
+
+    </form>
+
+    <p class="switch-page">
+        Already have an account?
+        <a href="{% url 'login' %}">Sign In</a>
+    </p>
+
+    <div class="footer-text">
+        <i class="fa-solid fa-bolt"></i>
+        Create smarter with AI
+    </div>
+
+</div>
+
+<script>
+
+function togglePassword(id, button) {
+    const field = document.getElementById(id);
+    const hidden = field.type === "password";
+
+    field.type = hidden ? "text" : "password";
+
+    button.querySelector("i").className = hidden
+        ? "fa-regular fa-eye-slash"
+        : "fa-regular fa-eye";
+}
+
+function checkStrength() {
+    const password = document.getElementById("password1").value;
+    const bar = document.getElementById("strengthBar");
+    const text = document.getElementById("strengthText");
+
+    let score = 0;
+
+    if (password.length >= 8) score++;
+    if (/[A-Z]/.test(password)) score++;
+    if (/[0-9]/.test(password)) score++;
+    if (/[^A-Za-z0-9]/.test(password)) score++;
+
+    const colors = ["#64748b", "#ef4444", "#f59e0b", "#84cc16", "#22c55e"];
+    const labels = [
+        "Password strength",
+        "Weak password",
+        "Fair password",
+        "Good password",
+        "Strong password"
+    ];
+
+    bar.style.width = (score * 25) + "%";
+    bar.style.background = colors[score];
+    text.innerText = labels[score];
+    text.style.color = colors[score];
+}
+
+</script>
+
+</body>
+</html>
