@@ -1,100 +1,354 @@
+
 {% extends 'base.html' %}
+
+{% block title %}Dashboard | CreatorOS AI{% endblock %}
 
 {% block content %}
 
-<h1>Creator Dashboard</h1>
+<div class="dashboard">
 
-<section class="hero">
+    <!-- PAGE HEADER -->
+    <div class="dashboard-heading">
 
-    <h1>Create smarter. Grow faster.</h1>
+        <div>
 
-    <p>Your all-in-one AI-powered creator workspace.</p>
+            <span class="eyebrow">YOUR CREATOR SPACE</span>
 
-    <a class="btn" href="{% url 'ai_tool' 'writer' %}">
-        Start Creating
-    </a>
+            <h1>Creator Dashboard</h1>
 
-</section>
+            <p>
+                Welcome back, {{ request.user.username }}!
+                Let's create something amazing.
+            </p>
 
-<div class="grid">
+        </div>
 
-    <div class="card">
-        <p>Saved Content</p>
-        <h2>{{ saved_count }}</h2>
+        <div class="workspace-status">
+
+            <span class="status-dot"></span>
+            Workspace Active
+
+        </div>
+
     </div>
 
-    <div class="card">
-        <p>Planned Posts</p>
-        <h2>{{ planned_count }}</h2>
-    </div>
+    <!-- PREMIUM HERO -->
+    <section class="hero">
 
-    <div class="card">
-        <p>Total Recorded Views</p>
-        <h2>{{ views_count }}</h2>
-    </div>
+        <div class="hero-content">
 
-</div>
+            <div class="hero-tag">
 
-<h2 class="section-title">Explore Creator Tools</h2>
+                <i data-lucide="sparkles"></i>
+                AI-Powered Workspace
 
-<div class="grid">
+            </div>
 
-    <a class="card tool"
-       href="{% url 'ai_tool' 'writer' %}">
-        <h2>✍ AI Writer</h2>
-        <p>Generate engaging content.</p>
-    </a>
+            <h2>
+                Create smarter.
+                <br>
+                <span>Grow faster.</span>
+            </h2>
 
-    <a class="card tool"
-       href="{% url 'ai_tool' 'prompt' %}">
-        <h2>✦ Prompt Designer</h2>
-        <p>Create professional AI prompts.</p>
-    </a>
+            <p>
+                Everything you need to create, plan,
+                publish and grow your digital presence.
+            </p>
 
-    <a class="card tool"
-       href="{% url 'ai_tool' 'video' %}">
-        <h2>▶ Video Concept</h2>
-        <p>Generate scripts and storyboards.</p>
-    </a>
+            <a class="btn hero-button"
+               href="{% url 'ai_tool' 'writer' %}">
 
-    <a class="card tool"
-       href="{% url 'ai_tool' 'ideas' %}">
-        <h2>💡 Idea Generator</h2>
-        <p>Discover new content ideas.</p>
-    </a>
+                Start Creating
+                <i data-lucide="arrow-up-right"></i>
 
-    <a class="card tool"
-       href="{% url 'planner' %}">
-        <h2>▦ Social Planner</h2>
-        <p>Organize your publishing schedule.</p>
-    </a>
-
-    <a class="card tool"
-       href="{% url 'analytics' %}">
-        <h2>↗ Creator Analytics</h2>
-        <p>Track your content performance.</p>
-    </a>
-
-</div>
-
-<h2 class="section-title">Recent Content</h2>
-
-<div class="card">
-
-    {% for item in recent_content %}
-
-        <p>
-            <a href="{% url 'edit_content' item.pk %}">
-                {{ item.title }}
             </a>
-            — {{ item.module }}
-        </p>
 
-    {% empty %}
+        </div>
 
-        <p>No saved content yet.</p>
+        <div class="hero-art" aria-hidden="true">
 
-    {% endfor %}
+            <div class="orbit orbit-one"></div>
+            <div class="orbit orbit-two"></div>
+            <div class="orbit orbit-three"></div>
+
+            <div class="hero-core">
+                <i data-lucide="sparkles"></i>
+            </div>
+
+            <div class="floating-icon floating-one">
+                <i data-lucide="pen-line"></i>
+            </div>
+
+            <div class="floating-icon floating-two">
+                <i data-lucide="clapperboard"></i>
+            </div>
+
+            <div class="floating-icon floating-three">
+                <i data-lucide="chart-no-axes-combined"></i>
+            </div>
+
+        </div>
+
+    </section>
+
+    <!-- STATISTICS -->
+    <div class="dashboard-stats">
+
+        <a class="stat-card"
+           href="{% url 'saved_content' %}">
+
+            <div class="stat-icon purple">
+                <i data-lucide="bookmark"></i>
+            </div>
+
+            <div class="stat-info">
+
+                <p>Saved Content</p>
+                <h2>{{ saved_count|default:0 }}</h2>
+
+            </div>
+
+            <i class="stat-arrow" data-lucide="arrow-up-right"></i>
+
+        </a>
+
+        <a class="stat-card"
+           href="{% url 'planner' %}">
+
+            <div class="stat-icon blue">
+                <i data-lucide="calendar-days"></i>
+            </div>
+
+            <div class="stat-info">
+
+                <p>Planned Posts</p>
+                <h2>{{ planned_count|default:0 }}</h2>
+
+            </div>
+
+            <i class="stat-arrow" data-lucide="arrow-up-right"></i>
+
+        </a>
+
+        <a class="stat-card"
+           href="{% url 'analytics' %}">
+
+            <div class="stat-icon green">
+                <i data-lucide="eye"></i>
+            </div>
+
+            <div class="stat-info">
+
+                <p>Total Views</p>
+                <h2>{{ views_count|default:0 }}</h2>
+
+            </div>
+
+            <i class="stat-arrow" data-lucide="arrow-up-right"></i>
+
+        </a>
+
+    </div>
+
+    <!-- CREATOR TOOLS -->
+    <div class="section-heading">
+
+        <div>
+
+            <h2>Creator Tools</h2>
+            <p>Everything you need in one workspace.</p>
+
+        </div>
+
+        <span class="tool-count">6 Tools</span>
+
+    </div>
+
+    <div class="tools-grid">
+
+        <a class="tool-card"
+           href="{% url 'ai_tool' 'writer' %}">
+
+            <div class="tool-top">
+
+                <div class="tool-icon purple">
+                    <i data-lucide="pen-line"></i>
+                </div>
+
+                <i class="tool-arrow" data-lucide="arrow-up-right"></i>
+
+            </div>
+
+            <h3>AI Writer</h3>
+            <p>Generate engaging content in seconds.</p>
+
+        </a>
+
+        <a class="tool-card"
+           href="{% url 'ai_tool' 'prompt' %}">
+
+            <div class="tool-top">
+
+                <div class="tool-icon blue">
+                    <i data-lucide="wand-sparkles"></i>
+                </div>
+
+                <i class="tool-arrow" data-lucide="arrow-up-right"></i>
+
+            </div>
+
+            <h3>Prompt Designer</h3>
+            <p>Create powerful, professional AI prompts.</p>
+
+        </a>
+
+        <a class="tool-card"
+           href="{% url 'ai_tool' 'video' %}">
+
+            <div class="tool-top">
+
+                <div class="tool-icon pink">
+                    <i data-lucide="clapperboard"></i>
+                </div>
+
+                <i class="tool-arrow" data-lucide="arrow-up-right"></i>
+
+            </div>
+
+            <h3>Video Concept</h3>
+            <p>Generate scripts and video storyboards.</p>
+
+        </a>
+
+        <a class="tool-card"
+           href="{% url 'ai_tool' 'ideas' %}">
+
+            <div class="tool-top">
+
+                <div class="tool-icon orange">
+                    <i data-lucide="lightbulb"></i>
+                </div>
+
+                <i class="tool-arrow" data-lucide="arrow-up-right"></i>
+
+            </div>
+
+            <h3>Idea Generator</h3>
+            <p>Discover fresh ideas for your audience.</p>
+
+        </a>
+
+        <a class="tool-card"
+           href="{% url 'planner' %}">
+
+            <div class="tool-top">
+
+                <div class="tool-icon green">
+                    <i data-lucide="calendar-days"></i>
+                </div>
+
+                <i class="tool-arrow" data-lucide="arrow-up-right"></i>
+
+            </div>
+
+            <h3>Social Planner</h3>
+            <p>Organize your publishing schedule.</p>
+
+        </a>
+
+        <a class="tool-card"
+           href="{% url 'analytics' %}">
+
+            <div class="tool-top">
+
+                <div class="tool-icon cyan">
+                    <i data-lucide="chart-no-axes-combined"></i>
+                </div>
+
+                <i class="tool-arrow" data-lucide="arrow-up-right"></i>
+
+            </div>
+
+            <h3>Creator Analytics</h3>
+            <p>Track performance and audience growth.</p>
+
+        </a>
+
+    </div>
+
+    <!-- RECENT CONTENT -->
+    <div class="section-heading">
+
+        <div>
+
+            <h2>Recent Content</h2>
+            <p>Continue where you left off.</p>
+
+        </div>
+
+        <a class="view-all"
+           href="{% url 'saved_content' %}">
+
+            View all
+            <i data-lucide="chevron-right"></i>
+
+        </a>
+
+    </div>
+
+    <div class="recent-card">
+
+        {% for item in recent_content %}
+
+            <a class="recent-item"
+               href="{% url 'edit_content' item.pk %}">
+
+                <div class="recent-icon">
+                    <i data-lucide="file-text"></i>
+                </div>
+
+                <div class="recent-details">
+
+                    <strong>{{ item.title }}</strong>
+                    <small>{{ item.module }}</small>
+
+                </div>
+
+                <i data-lucide="chevron-right"></i>
+
+            </a>
+
+        {% empty %}
+
+            <div class="empty-state">
+
+                <div class="empty-icon">
+                    <i data-lucide="folder-open"></i>
+                </div>
+
+                <h3>No saved content yet</h3>
+
+                <p>Your creations will appear here.</p>
+
+                <a class="btn"
+                   href="{% url 'ai_tool' 'writer' %}">
+
+                    <i data-lucide="plus"></i>
+                    Create Content
+
+                </a>
+
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+    <footer class="dashboard-footer">
+
+        CreatorOS AI &middot; Your digital creator workspace
+
+    </footer>
 
 </div>
 
