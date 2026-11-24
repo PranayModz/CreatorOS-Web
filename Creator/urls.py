@@ -63,4 +63,6 @@ urlpatterns = [
         name='delete_analytics'
     ),
 
+    path('api/ai/status/', views.ai_status, name='ai_status'),
+
 ]

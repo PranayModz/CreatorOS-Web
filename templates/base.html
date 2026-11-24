@@ -1,111 +1,352 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0">
 
-    <title>CreatorOS AI</title>
+    <meta name="theme-color" content="#0b0e18">
+
+    <title>{% block title %}CreatorOS AI{% endblock %}</title>
 
     <link rel="stylesheet"
-          href="{% static 'css/style.css' %}">
+          href="{% static 'css/style.css' %}?v=3.0">
 
+    <script defer src="https://unpkg.com/lucide@0.468.0/dist/umd/lucide.min.js"></script>
 </head>
+
 <body>
 
-    
+    <!-- MOBILE HEADER -->
+    <header class="mobile-header">
 
-    <aside class="sidebar">
+        <button class="icon-button"
+                id="menuToggle"
+                type="button"
+                aria-label="Open navigation"
+                aria-expanded="false"
+                aria-controls="sidebar">
 
-        <div class="sidebar-account">
+            <i data-lucide="menu"></i>
 
-  
-        <h2 class="logo">✦ CreatorOS AI</h2>
+        </button>
 
-        <p class="sidebar-label">WORKSPACE</p>
+        <a href="{% url 'dashboard' %}"
+           class="mobile-brand">
 
-        <a href="{% url 'dashboard' %}">
-            Dashboard
+            <i data-lucide="sparkles"></i>
+            CreatorOS <span>AI</span>
+
         </a>
 
-        <a href="{% url 'ai_tool' 'writer' %}">
-            AI Writer
-        </a>
+        <button class="mobile-avatar"
+                type="button"
+                id="profileToggle"
+                aria-label="Open account menu">
 
-        <a href="{% url 'ai_tool' 'prompt' %}">
-            Prompt Designer
-        </a>
+            {{ request.user.username|first|upper }}
 
-        <a href="{% url 'ai_tool' 'video' %}">
-            Video Concept
-        </a>
+        </button>
 
-        <a href="{% url 'ai_tool' 'ideas' %}">
-            Idea Generator
-        </a>
+    </header>
 
-        <a href="{% url 'planner' %}">
-            Social Media Planner
-        </a>
+    <!-- MOBILE OVERLAY -->
+    <div class="sidebar-overlay"
+         id="sidebarOverlay"></div>
 
-        <a href="{% url 'analytics' %}">
-            Creator Analytics
-        </a>
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
 
-        <a href="{% url 'saved_content' %}">
-            Saved Content
-        </a>
+        <div class="sidebar-brand">
+
+            <div class="brand-icon">
+                <i data-lucide="sparkles"></i>
+            </div>
+
+            <div>
+                <h2 class="logo">CreatorOS <span>AI</span></h2>
+                <small>Creator Workspace</small>
+            </div>
+
+            <button class="icon-button sidebar-close"
+                    id="sidebarClose"
+                    type="button"
+                    aria-label="Close navigation">
+
+                <i data-lucide="x"></i>
+
+            </button>
+
+        </div>
+
+        <nav class="sidebar-nav">
+
+            <p class="sidebar-label">WORKSPACE</p>
+
+            <a href="{% url 'dashboard' %}"
+               class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+
+                <i data-lucide="layout-dashboard"></i>
+                <span>Dashboard</span>
+
+            </a>
+
+            <p class="sidebar-label">AI TOOLS</p>
+
+            <a href="{% url 'ai_tool' 'writer' %}"
+               class="nav-link {% if request.resolver_match.kwargs.tool == 'writer' %}active{% endif %}">
+
+                <i data-lucide="pen-line"></i>
+                <span>AI Writer</span>
+
+            </a>
+
+            <a href="{% url 'ai_tool' 'prompt' %}"
+               class="nav-link {% if request.resolver_match.kwargs.tool == 'prompt' %}active{% endif %}">
+
+                <i data-lucide="wand-sparkles"></i>
+                <span>Prompt Designer</span>
+
+            </a>
+
+            <a href="{% url 'ai_tool' 'video' %}"
+               class="nav-link {% if request.resolver_match.kwargs.tool == 'video' %}active{% endif %}">
+
+                <i data-lucide="clapperboard"></i>
+                <span>Video Concept</span>
+
+            </a>
+
+            <a href="{% url 'ai_tool' 'ideas' %}"
+               class="nav-link {% if request.resolver_match.kwargs.tool == 'ideas' %}active{% endif %}">
+
+                <i data-lucide="lightbulb"></i>
+                <span>Idea Generator</span>
+
+            </a>
+
+            <p class="sidebar-label">MANAGE</p>
+
+            <a href="{% url 'planner' %}"
+               class="nav-link {% if request.resolver_match.url_name == 'planner' %}active{% endif %}">
+
+                <i data-lucide="calendar-days"></i>
+                <span>Social Media Planner</span>
+
+            </a>
+
+            <a href="{% url 'analytics' %}"
+               class="nav-link {% if request.resolver_match.url_name == 'analytics' %}active{% endif %}">
+
+                <i data-lucide="chart-no-axes-combined"></i>
+                <span>Creator Analytics</span>
+
+            </a>
+
+            <a href="{% url 'saved_content' %}"
+               class="nav-link {% if request.resolver_match.url_name == 'saved_content' %}active{% endif %}">
+
+                <i data-lucide="bookmark"></i>
+                <span>Saved Content</span>
+
+            </a>
+
+        </nav>
 
         {% if request.user.is_authenticated %}
 
-<div class="sidebar-account">
+        <div class="sidebar-account" id="accountSection">
 
-    <div class="account-profile">
+            <div class="account-profile">
 
-        <div class="account-avatar">
-            {{ request.user.username|first|upper }}
+                <div class="account-avatar">
+                    {{ request.user.username|first|upper }}
+                </div>
+
+                <div class="account-info">
+
+                    <strong>{{ request.user.username }}</strong>
+                    <small>Creator Account</small>
+
+                </div>
+
+            </div>
+
+            <form method="POST"
+                  action="{% url 'logout' %}">
+
+                {% csrf_token %}
+
+                <button type="submit" class="account-logout">
+
+                    <i data-lucide="log-out"></i>
+                    Logout
+
+                </button>
+
+            </form>
+
         </div>
 
-        <div class="account-info">
-            <strong>{{ request.user.username }}</strong>
-            <small>Creator Account</small>
-        </div>
-
-    </div>
-
-    <form method="POST" action="{% url 'logout' %}">
-        {% csrf_token %}
-
-        <button type="submit" class="account-logout">
-            ↪ Logout
-        </button>
-
-    </form>
-
-</div>
-
-{% endif %}
+        {% endif %}
 
         <div class="sidebar-footer">
+
+            <span class="status-dot"></span>
             AI Powered Workspace
+
         </div>
 
     </aside>
 
+    <!-- MAIN CONTENT -->
     <main class="main-content">
 
-        {% for message in messages %}
-            <div class="message">
-                {{ message }}
-            </div>
-        {% endfor %}
+        <div class="page-container">
 
-        {% block content %}
-        {% endblock %}
+            {% for message in messages %}
+
+                <div class="message" role="status">
+                    {{ message }}
+                </div>
+
+            {% endfor %}
+
+            {% block content %}
+            {% endblock %}
+
+        </div>
 
     </main>
+
+    <!-- MOBILE BOTTOM NAVIGATION -->
+    <nav class="bottom-nav" aria-label="Mobile navigation">
+
+        <a href="{% url 'dashboard' %}"
+           class="{% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+
+            <i data-lucide="house"></i>
+            <span>Home</span>
+
+        </a>
+
+        <a href="{% url 'ai_tool' 'writer' %}"
+           class="{% if request.resolver_match.url_name == 'ai_tool' %}active{% endif %}">
+
+            <i data-lucide="sparkles"></i>
+            <span>Create</span>
+
+        </a>
+
+        <a href="{% url 'planner' %}"
+           class="{% if request.resolver_match.url_name == 'planner' %}active{% endif %}">
+
+            <i data-lucide="calendar-days"></i>
+            <span>Planner</span>
+
+        </a>
+
+        <a href="{% url 'analytics' %}"
+           class="{% if request.resolver_match.url_name == 'analytics' %}active{% endif %}">
+
+            <i data-lucide="chart-no-axes-combined"></i>
+            <span>Analytics</span>
+
+        </a>
+
+        <a href="{% url 'saved_content' %}"
+           class="{% if request.resolver_match.url_name == 'saved_content' %}active{% endif %}">
+
+            <i data-lucide="bookmark"></i>
+            <span>Saved</span>
+
+        </a>
+
+    </nav>
+
+    <script>
+
+        document.addEventListener("DOMContentLoaded", function () {
+
+            const sidebar = document.getElementById("sidebar");
+            const overlay = document.getElementById("sidebarOverlay");
+            const toggle = document.getElementById("menuToggle");
+            const close = document.getElementById("sidebarClose");
+            const profile = document.getElementById("profileToggle");
+
+            function openSidebar() {
+
+                sidebar.classList.add("open");
+                overlay.classList.add("visible");
+                document.body.classList.add("menu-open");
+                toggle.setAttribute("aria-expanded", "true");
+                close.focus();
+
+            }
+
+            function closeSidebar(restoreFocus = true) {
+
+                sidebar.classList.remove("open");
+                overlay.classList.remove("visible");
+                document.body.classList.remove("menu-open");
+                toggle.setAttribute("aria-expanded", "false");
+
+                if (restoreFocus) {
+                    toggle.focus();
+                }
+
+            }
+
+            toggle.addEventListener("click", openSidebar);
+
+            close.addEventListener("click", function () {
+                closeSidebar();
+            });
+
+            overlay.addEventListener("click", function () {
+                closeSidebar();
+            });
+
+            profile.addEventListener("click", function () {
+
+                openSidebar();
+
+                const account = document.getElementById("accountSection");
+
+                if (account) {
+                    account.scrollIntoView({ block: "nearest" });
+                }
+
+            });
+
+            document.addEventListener("keydown", function (event) {
+
+                if (event.key === "Escape" &&
+                    sidebar.classList.contains("open")) {
+
+                    closeSidebar();
+
+                }
+
+            });
+
+            window.addEventListener("resize", function () {
+
+                if (window.innerWidth > 900) {
+                    closeSidebar(false);
+                }
+
+            });
+
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+
+        });
+
+    </script>
 
 </body>
 </html>
