@@ -141,3 +141,20 @@ TIME_ZONE = 'Asia/Kolkata'
 LOGIN_URL = 'login'
 LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = 'login'
+
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
+MIDDLEWARE.insert(
+    1, 'whitenoise.middleware.WhiteNoiseMiddleware'
+)
+
+DEBUG = 'RENDER' not in os.environ
+
+if os.environ.get('RENDER_EXTERNAL_HOSTNAME'):
+    ALLOWED_HOSTS = [
+        os.environ['RENDER_EXTERNAL_HOSTNAME']
+    ]
+
+    CSRF_TRUSTED_ORIGINS = [
+        'https://' + os.environ['RENDER_EXTERNAL_HOSTNAME']
+    ]
